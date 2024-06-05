@@ -5,11 +5,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: event_sphere
+    container_name: event_sphere_app
     volumes:
       - .:/var/www/html
     ports:
-      - "9000:9000"
+      - "8000:8000"
     environment:
       - APP_ENV=dev
       - DATABASE_URL=sqlite:///%kernel.project_dir%/var/data.db

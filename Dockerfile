@@ -1,24 +1,34 @@
 # Use an official PHP runtime as a parent image
-FROM php:8.2-fpm
+FROM php:8.0-fpm
 
+# Set working directory
+WORKDIR /var/www/html
+
+# Install dependencies including wget
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
     wget \
     libsqlite3-dev \
+    nodejs \
+    npm \
     && docker-php-ext-install pdo pdo_sqlite
 
+# Install Composer
 ADD ./docker/install-composer.sh /install-composer.sh
 RUN chmod +x /install-composer.sh && /install-composer.sh && rm -f /install-composer.sh
 RUN composer self-update
 
-RUN wget https://get.symfony.com/cli/installer -O - | bash
-RUN echo "export PATH="$HOME/.symfony5/bin:$PATH"" >> ~/.bashrc
+# Install Symfony CLI
+RUN curl -sS https://get.symfony.com/cli/installer | bash
+RUN mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
 
-WORKDIR /var/www
+# Copy existing application directory contents
+COPY . /var/www/html
 
-COPY . /var/www
+# Install Yarn
+RUN npm install --global yarn
 
-RUN chown -R www-data:www-data /var/www
-
-EXPOSE 9000
+# Expose port 8000 and start php-fpm server
+EXPOSE 8000
+CMD ["php-fpm"]
