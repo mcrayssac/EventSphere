@@ -9,11 +9,12 @@ RUN apt-get update && apt-get install -y \
     git \
     unzip \
     wget \
+    curl \
     sqlite3 \
     libsqlite3-dev \
-    nodejs \
-    npm \
-    && docker-php-ext-install pdo pdo_sqlite
+    && docker-php-ext-install pdo pdo_sqlite \
+    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
 
 # Install Composer
 ADD ./docker/install-composer.sh /install-composer.sh
