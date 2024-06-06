@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     git \
     unzip \
     wget \
+    sqlite3 \
     libsqlite3-dev \
     nodejs \
     npm \
