@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -11,7 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Id
@@ -33,7 +34,6 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string")
-     * @Assert\NotBlank
      * @Assert\Length(min=8, minMessage="Your password should be at least 8 characters")
      * @Assert\Regex(
      *     pattern="/^(?=.*[a-zA-Z])(?=.*\d).+$/",
@@ -58,6 +58,16 @@ class User implements UserInterface
      * @ORM\Column(type="json")
      */
     private $roles = [];
+
+    /**
+     * @Assert\NotBlank
+     * @Assert\Length(min=8, minMessage="Your password should be at least 8 characters")
+     * @Assert\Regex(
+     *     pattern="/^(?=.*[a-zA-Z])(?=.*\d).+$/",
+     *     message="Your password must contain both letters and numbers"
+     * )
+     */
+    private $plainPassword;
 
     public function getId(): ?int
     {
@@ -144,9 +154,22 @@ class User implements UserInterface
         return (string) $this->email;
     }
 
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 }
+
