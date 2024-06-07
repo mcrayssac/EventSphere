@@ -13,7 +13,7 @@
             <nav class="mainmenu mobile-menu">
                 <ul>
                     <li class="{{ app.request.get('_route') == 'app_home' ? 'active' : '' }}"><a href="{{ path('app_home') }}">Home</a></li>
-                    <li><a href="./create.html">Create</a></li>
+                    <li class="{{ app.request.get('_route') == 'event_create' ? 'active' : '' }}"><a href="{{ path('event_create') }}">Create</a></li>
                     <li><a href="./events.html">Events</a>
                         {# <ul class="dropdown">
                             <li><a href="#">Jayden</a></li>
@@ -24,14 +24,16 @@
                         {# Si tu veux faire un dropdown, c'est comme ça#}
                     </li>
                     <li><a href="./subcription.html">Subcription</a></li>
-                    <li><a href="./profile.html">Your Profile</a></li>
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <li class="{{ app.request.get('_route') == 'app_profile' ? 'active' : '' }}"><a href="{{ path('app_profile') }}">Your Profile</a></li>
+                    {% endif %}
                 </ul>
             </nav>
 
             {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
                 <a href="{{ path('app_login') }}" class="primary-btn top-btn">{#<i class="fa fa-ticket"></i>#} Sign in/up</a>
             {% else %}
-                <a href="{{ path('app_logout') }}" class="primary-btn top-btn">{#<i class="fa fa-ticket"></i>#} Logout</a>
+                <a href="{{ path('app_logout') }}" class="primary-btn top-btn"><i class="fa fa-sign-out"></i></a>
             {% endif %}
 
         </div>

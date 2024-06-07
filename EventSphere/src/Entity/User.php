@@ -26,7 +26,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\NotBlank
      * @Assert\Email(message="Please enter a valid email address.")
      * @Assert\Regex(
-     *     pattern="/^[^\s@]+@[^\s@]+\.[^\s@]+$/",
+     *     pattern="/^[^\s@]{3,}@[^\s@]{3,}\.[^\s@]{2,}$/",
      *     message="The email format should be xxx@yyy.zz"
      * )
      */
@@ -60,7 +60,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $roles = [];
 
     /**
-     * @Assert\NotBlank
+     * @Assert\NotBlank(groups={"update"})
      * @Assert\Length(min=8, minMessage="Your password should be at least 8 characters")
      * @Assert\Regex(
      *     pattern="/^(?=.*[a-zA-Z])(?=.*\d).+$/",

@@ -1,6 +1,5 @@
 <?php
 
-// src/Controller/RegistrationController.php
 namespace App\Controller;
 
 use App\Entity\User;
@@ -22,7 +21,7 @@ class RegistrationController extends AbstractController
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home');
         }
-        
+
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);

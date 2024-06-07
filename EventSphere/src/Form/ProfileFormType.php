@@ -2,19 +2,22 @@
 
 namespace App\Form;
 
-use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+use App\Entity\User;
+use Symfony\Component\Form\FormInterface;
 
-class RegistrationFormType extends AbstractType
+
+class ProfileFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -44,26 +47,36 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('plainPassword', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'invalid_message' => 'The password fields must match.',
-                'options' => ['attr' => ['class' => 'password-field']],
-                'required' => true,
-                'first_options'  => ['label' => 'Password'],
-                'second_options' => ['label' => 'Confirm Password'],
+            ->add('currentPassword', PasswordType::class, [
+                'mapped' => false,
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => 'Please enter your current password',
                     ]),
+                    new UserPassword([
+                        'message' => 'The current password is incorrect.',
+                    ]),
+                ],
+            ])
+            ->add('plainPassword', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'required' => false,
+                'mapped' => false,
+                'first_options' => ['label' => 'New Password'],
+                'second_options' => ['label' => 'Confirm New Password'],
+                'invalid_message' => 'The password fields must match.',
+                'constraints' => [
                     new Length([
                         'min' => 8,
                         'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        'max' => 4096,
                     ]),
                     new Regex([
                         'pattern' => '/^(?=.*[a-zA-Z])(?=.*\d).+$/',
                         'message' => 'Your password must contain both letters and numbers'
                     ]),
                 ],
+                'validation_groups' => ['update'],
             ]);
     }
 
@@ -71,10 +84,13 @@ class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-            'csrf_protection' => true,
-            'csrf_field_name' => '_token',
-            'csrf_token_id' => 'registration_item',
+            'validation_groups' => function (FormInterface $form) {
+                $groups = ['Default'];
+                if ($form->get('plainPassword')->getData()) {
+                    $groups[] = 'update';
+                }
+                return $groups;
+            },
         ]);
     }
 }
-
