@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\EventRepository;
+use Knp\Component\Pager\PaginatorInterface;
 
 class EventController extends AbstractController
 {
@@ -30,6 +32,38 @@ class EventController extends AbstractController
 
         return $this->render('event/create.html.twig', [
             'eventForm' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/events', name: 'app_events')]
+    public function list(EventRepository $eventRepository, PaginatorInterface $paginator, Request $request): Response
+    {
+        $queryBuilder = $eventRepository->createQueryBuilder('e')
+            ->orderBy('e.dateTime', 'DESC');
+
+        $pagination = $paginator->paginate(
+            $queryBuilder,
+            $request->query->getInt('page', 1),
+            10 // Number of items per page
+        );
+
+        return $this->render('event/list.html.twig', [
+            'pagination' => $pagination,
+        ]);
+    }
+
+    #[Route('/event/{id}', name: 'app_event_detail')]
+    public function show(int $id, EventRepository $eventRepository): Response
+    {
+        $event = $eventRepository->find($id);
+        if (!$event) {
+            throw $this->createNotFoundException('Event not found.');
+        }
+
+        $this->denyAccessUnlessGranted('view', $event);
+
+        return $this->render('event/detail.html.twig', [
+            'event' => $event,
         ]);
     }
 }

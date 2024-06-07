@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Event List{% endblock %}
+
+{% block body %}
+<section class="event-list spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h2>Events</h2>
+                    <p><i class="fas fa-user-astronaut"></i> Find your next adventure - whether it’s binge-watching or bungee-jumping!</p>
+                </div>
+
+                <div class="schedule-tab">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tabs-0" role="tabpanel">
+                            {% for event in pagination.items %}
+                            <div class="st-content" style="cursor: pointer;" onclick="window.location='{{ path('app_event_detail', {'id': event.id}) }}';">
+                                <div class="row align-items-center">
+                                    <div class="col-lg-3">
+                                        <div class="sc-pic">
+                                            <img src="{{ asset('custom/img/Placeholder.png') }}" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <div class="sc-text">
+                                            <h4><i class="fas fa-calendar"></i> {{ event.title }}</h4>
+                                            <p><i class="fas fa-pen-to-square"></i> {{ event.description }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <ul class="sc-widget">
+                                            <li><i class="fas fa-clock"></i> {{ event.dateTime|date('M d, Y H:i') }}</li>
+                                            <li><i class="fas fa-user"></i> Max participants: {{ event.maxParticipants }}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <p>No events found.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="pagination text-center">
+                        {{ knp_pagination_render(pagination) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

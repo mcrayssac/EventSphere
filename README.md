@@ -47,6 +47,9 @@ composer require symfony/maker-bundle --dev
 ```bash
 composer require form
 ```
+```bash
+composer require knplabs/knp-paginator-bundle
+```
 
 ## Yarn install
 ```bash
@@ -54,4 +57,12 @@ yarn install
 ```
 ```bash
 yarn encore dev
+```
+
+## NPM install
+```bash
+npm install --save-dev sass-loade^14.0.0 sass
+```
+```bash
+npm run dev
 ```

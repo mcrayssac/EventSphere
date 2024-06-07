@@ -12,9 +12,9 @@
         <div class="nav-menu">
             <nav class="mainmenu mobile-menu">
                 <ul>
-                    <li class="{{ app.request.get('_route') == 'app_home' ? 'active' : '' }}"><a href="{{ path('app_home') }}">Home</a></li>
-                    <li class="{{ app.request.get('_route') == 'event_create' ? 'active' : '' }}"><a href="{{ path('event_create') }}">Create</a></li>
-                    <li><a href="./events.html">Events</a>
+                    <li class="{{ app.request.get('_route') == 'app_home' ? 'active' : '' }}"><a href="{{ path('app_home') }}"><i class="fas fa-house"></i> Home</a></li>
+                    <li class="{{ app.request.get('_route') == 'event_create' ? 'active' : '' }}"><a href="{{ path('event_create') }}"><i class="fas fa-calendar-plus"></i> Create</a></li>
+                    <li class="{{ app.request.get('_route') == 'app_events' ? 'active' : '' }}"><a href="{{ path('app_events') }}"><i class="fas fa-calendar-week"></i> Events</a>
                         {# <ul class="dropdown">
                             <li><a href="#">Jayden</a></li>
                             <li><a href="#">Sara</a></li>
@@ -23,17 +23,17 @@
                         </ul> #}
                         {# Si tu veux faire un dropdown, c'est comme ça#}
                     </li>
-                    <li><a href="./subcription.html">Subcription</a></li>
+                    <li><a href="./subcription.html"><i class="fas fa-bookmark"></i> Subcription</a></li>
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                        <li class="{{ app.request.get('_route') == 'app_profile' ? 'active' : '' }}"><a href="{{ path('app_profile') }}">Your Profile</a></li>
+                        <li class="{{ app.request.get('_route') == 'app_profile' ? 'active' : '' }}"><a href="{{ path('app_profile') }}"><i class="fas fa-id-badge"></i> Your Profile</a></li>
                     {% endif %}
                 </ul>
             </nav>
 
             {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
-                <a href="{{ path('app_login') }}" class="primary-btn top-btn">{#<i class="fa fa-ticket"></i>#} Sign in/up</a>
+                <a href="{{ path('app_login') }}" class="primary-btn top-btn"><i class="fas fa-right-to-bracket"></i></a>
             {% else %}
-                <a href="{{ path('app_logout') }}" class="primary-btn top-btn"><i class="fa fa-sign-out"></i></a>
+                <a href="{{ path('app_logout') }}" class="primary-btn top-btn"><i class="fas fa-right-from-bracket"></i></a>
             {% endif %}
 
         </div>

@@ -21,6 +21,12 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
+    public function findAllWithPagination()
+    {
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.dateTime', 'DESC');
+    }
+
 //    /**
 //     * @return Event[] Returns an array of Event objects
 //     */
