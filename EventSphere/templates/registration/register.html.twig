@@ -3,41 +3,66 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
 
-    {{ form_errors(registrationForm) }}
-
-    {{ form_start(registrationForm) }}
-        <div class="form-group">
-            {{ form_label(registrationForm.firstName) }}
-            {{ form_widget(registrationForm.firstName, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(registrationForm.firstName) }}
+    <!-- Registration Form Section Begin -->
+    <section class="contact-from-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <h2>Register</h2>
+                        <p>Fill out the form below to create an account.</p>
+                        <div class="row mt-1">
+                            <div class="col-lg-12 text-center">
+                                <p>Already have an account? <a class="site-btn" href="{{ path('app_login') }}">Go here</a> to login.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    {{ form_start(registrationForm, {'attr': {'class': 'comment-form contact-form'}}) }}
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    {{ form_widget(registrationForm.firstName, {'attr': {'class': 'form-control', 'placeholder': 'First Name'}}) }}
+                                    {{ form_errors(registrationForm.firstName) }}
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    {{ form_widget(registrationForm.lastName, {'attr': {'class': 'form-control', 'placeholder': 'Last Name'}}) }}
+                                    {{ form_errors(registrationForm.lastName) }}
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
+                                    {{ form_errors(registrationForm.email) }}
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control', 'placeholder': 'Password'}}) }}
+                                    {{ form_errors(registrationForm.plainPassword.first) }}
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control', 'placeholder': 'Confirm Password'}}) }}
+                                    {{ form_errors(registrationForm.plainPassword.second) }}
+                                </div>
+                            </div>
+                            <div class="col-lg-12 text-center">
+                                <button type="submit" class="site-btn">Register</button>
+                            </div>
+                        </div>
+                    {{ form_end(registrationForm) }}
+                </div> 
+            </div>
         </div>
+    </section>
+    <!-- Registration Form Section End -->
 
-        <div class="form-group">
-            {{ form_label(registrationForm.lastName) }}
-            {{ form_widget(registrationForm.lastName, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(registrationForm.lastName) }}
-        </div>
-
-        <div class="form-group">
-            {{ form_label(registrationForm.email) }}
-            {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(registrationForm.email) }}
-        </div>
-
-        <div class="form-group">
-            {{ form_label(registrationForm.plainPassword.first) }}
-            {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(registrationForm.plainPassword.first) }}
-        </div>
-
-        <div class="form-group">
-            {{ form_label(registrationForm.plainPassword.second) }}
-            {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(registrationForm.plainPassword.second) }}
-        </div>
-
-        <button type="submit" class="btn btn-primary">Register</button>
-    {{ form_end(registrationForm) }}
 {% endblock %}

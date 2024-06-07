@@ -6,13 +6,13 @@
 <!-- Header Section Begin -->
 <header class="header-section">
     <div class="container">
-        <a href="./">
-            <img src="{{ asset("custom/img/Logo.png") }}" alt="" style="max-width:200px; padding-top:20px; padding-bottom:20px">
+        <a>
+            <img src="{{ asset("custom/img/RBG_EventSphere.png") }}" alt="" style="border-radius: 50%; max-width:100px; padding-top:10px; padding-bottom:10px">
         </a>
         <div class="nav-menu">
             <nav class="mainmenu mobile-menu">
                 <ul>
-                    <li class="active"><a href="./index.html">Home</a></li>
+                    <li class="{{ app.request.get('_route') == 'app_home' ? 'active' : '' }}"><a href="{{ path('app_home') }}">Home</a></li>
                     <li><a href="./create.html">Create</a></li>
                     <li><a href="./events.html">Events</a>
                         {# <ul class="dropdown">
@@ -27,7 +27,13 @@
                     <li><a href="./profile.html">Your Profile</a></li>
                 </ul>
             </nav>
-            <a href="#" class="primary-btn top-btn">{#<i class="fa fa-ticket"></i>#} Connexion</a>
+
+            {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                <a href="{{ path('app_login') }}" class="primary-btn top-btn">{#<i class="fa fa-ticket"></i>#} Sign in/up</a>
+            {% else %}
+                <a href="{{ path('app_logout') }}" class="primary-btn top-btn">{#<i class="fa fa-ticket"></i>#} Logout</a>
+            {% endif %}
+
         </div>
         <div id="mobile-menu-wrap"></div>
     </div>
