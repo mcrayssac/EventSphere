@@ -3,18 +3,209 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<section class="schedule-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h2>Event Schedule</h2>
+                    <p>Do not miss any upcoming event that might interest you</p>
+                </div>
+            </div>
+        </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+        <div class="row">
+            <div class="col-lg-12">
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/var/www/html/EventSphere/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/var/www/html/EventSphere/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
-    </ul>
-</div>
+                <div class="schedule-tab">
+                    <ul class="nav nav-tabs" role="tablist">
+
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-0" role="tab">
+                                {# <h5>Missed</h5>
+                                <p>Maybe next time</p> #}
+                                <h5>All</h5>
+                                <p>Temporary...</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">
+                                <h5>Today</h5>
+                                <p>{{ currentDate|date("M d, Y") }}</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">
+                                <h5>Tomorrow</h5>
+                                <p>{{ currentDate|date_modify("+1 day")|date("M d, Y") }}</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">
+                                <h5>{{ currentDate|date_modify("+2 day")|date("l") }}</h5>
+                                <p>{{ currentDate|date_modify("+2 day")|date("M d, Y") }}</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">
+                                <h5>{{ currentDate|date_modify("+3 day")|date("l") }}</h5>
+                                <p>{{ currentDate|date_modify("+3 day")|date("M d, Y") }}</p>
+                            </a>
+                        </li>
+                        
+                    </ul>
+                    
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+
+                        <div class="tab-pane" id="tabs-0" role="tabpanel">
+
+                            {% for event in events %}
+                            <div class="st-content">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <div class="sc-pic">
+                                            <img src="{{ asset('custom/img/Placeholder.png') }}" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <div class="sc-text">
+                                            <h4>{{ event.title }}</h4>
+                                            <p>{{ event.description }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <ul class="sc-widget">
+                                            <li><i class="fa fa-clock-o"></i> {{ event.dateTime|date('M d, Y H:i') }}</li>
+                                            <li><i class="fa fa-user"></i> Max participants: {{ event.maxParticipants }}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <p>No events found.</p>
+                            {% endfor %}
+
+                        </div>
+
+                        <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                            {% for event in todayEvents %}
+                            <div class="st-content">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <div class="sc-pic">
+                                            <img src="{{ asset('custom/img/Placeholder.png') }}" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <div class="sc-text">
+                                            <h4>{{ event.title }}</h4>
+                                            <p>{{ event.description }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <ul class="sc-widget">
+                                            <li><i class="fa fa-clock-o"></i> {{ event.dateTime|date('M d, Y H:i') }}</li>
+                                            <li><i class="fa fa-user"></i> Max participants: {{ event.maxParticipants }}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <p>No events found for today.</p>
+                            {% endfor %}
+                        </div>
+
+                        <div class="tab-pane" id="tabs-2" role="tabpanel">
+                            {% for event in tomorrowEvents %}
+                            <div class="st-content">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <div class="sc-pic">
+                                            <img src="{{ asset('custom/img/Placeholder.png') }}" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <div class="sc-text">
+                                            <h4>{{ event.title }}</h4>
+                                            <p>{{ event.description }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <ul class="sc-widget">
+                                            <li><i class="fa fa-clock-o"></i> {{ event.dateTime|date('M d, Y H:i') }}</li>
+                                            <li><i class="fa fa-user"></i> Max participants: {{ event.maxParticipants }}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <p>No events found for tomorrow.</p>
+                            {% endfor %}
+                        </div>
+
+                        <div class="tab-pane" id="tabs-3" role="tabpanel">
+                            {% for event in dayAfterTomorrowEvents %}
+                            <div class="st-content">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <div class="sc-pic">
+                                            <img src="{{ asset('custom/img/Placeholder.png') }}" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <div class="sc-text">
+                                            <h4>{{ event.title }}</h4>
+                                            <p>{{ event.description }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <ul class="sc-widget">
+                                            <li><i class="fa fa-clock-o"></i> {{ event.dateTime|date('M d, Y H:i') }}</li>
+                                            <li><i class="fa fa-user"></i> Max participants: {{ event.maxParticipants }}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <p>No events found for {{ currentDate|date_modify("+2 day")|date("l") }}.</p>
+                            {% endfor %}
+                        </div>
+
+                        <div class="tab-pane" id="tabs-4" role="tabpanel">
+                            {% for event in threeDaysLaterEvents %}
+                            <div class="st-content">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <div class="sc-pic">
+                                            <img src="{{ asset('custom/img/Placeholder.png') }}" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <div class="sc-text">
+                                            <h4>{{ event.title }}</h4>
+                                            <p>{{ event.description }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <ul class="sc-widget">
+                                            <li><i class="fa fa-clock-o"></i> {{ event.dateTime|date('M d, Y H:i') }}</li>
+                                            <li><i class="fa fa-user"></i> Max participants: {{ event.maxParticipants }}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <p>No events found for {{ currentDate|date_modify("+3 day")|date("l") }}.</p>
+                            {% endfor %}
+                        </div>
+                       
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
 {% endblock %}
