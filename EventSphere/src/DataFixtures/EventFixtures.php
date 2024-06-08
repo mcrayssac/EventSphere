@@ -3,13 +3,21 @@
 namespace App\DataFixtures;
 
 use App\Entity\Event;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class EventFixtures extends Fixture
+class EventFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
+        $adminUser = $manager->getRepository(User::class)->findOneBy(['email' => 'admin@example.com']);
+
+        if (!$adminUser) {
+            throw new \Exception('Admin user not found. Please ensure UserFixtures are loaded first.');
+        }
+
         $events = [
             [
                 'title' => 'Event 1',
@@ -126,11 +134,19 @@ class EventFixtures extends Fixture
             $event->setDateTime($eventData['dateTime']);
             $event->setMaxParticipants($eventData['maxParticipants']);
             $event->setIsPublic($eventData['isPublic']);
+            $event->setCreator($adminUser);
 
             $manager->persist($event);
         }
 
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [
+            UserFixtures::class,
+        ];
     }
 }
 

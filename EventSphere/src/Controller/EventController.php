@@ -24,6 +24,8 @@ class EventController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            $event->setCreator($user);
             $entityManager->persist($event);
             $entityManager->flush();
 
@@ -88,5 +90,32 @@ class EventController extends AbstractController
             'currentTime' => $currentTime,
         ]);
     }
+
+    #[Route('/manage/events', name: 'manage_events')]
+    public function manageEvents(EventRepository $eventRepository, PaginatorInterface $paginator, Request $request): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $queryBuilder = $eventRepository->createQueryBuilder('e')
+            ->where('e.creator = :creator')
+            ->setParameter('creator', $user)
+            ->orderBy('e.dateTime', 'DESC');
+
+        $pagination = $paginator->paginate(
+            $queryBuilder,
+            $request->query->getInt('page', 1),
+            10 // Number of items per page
+        );
+
+        foreach ($pagination as $event) {
+            $event->remainingPlaces = $event->getRemainingPlaces();
+        }
+
+        return $this->render('event/manage.html.twig', [
+            'pagination' => $pagination,
+        ]);
+    }
+
 }
 

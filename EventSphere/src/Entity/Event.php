@@ -56,6 +56,12 @@ class Event
      */
     private $subscriptions;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="events")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $creator;
+
     public function __construct()
     {
         $this->subscriptions = new ArrayCollection();
@@ -156,5 +162,17 @@ class Event
     public function getRemainingPlaces(): int
     {
         return $this->maxParticipants - $this->subscriptions->count();
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?User $creator): self
+    {
+        $this->creator = $creator;
+
+        return $this;
     }
 }
