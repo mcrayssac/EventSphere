@@ -2536,3 +2536,55 @@ button[aria-expanded="false"] .expanded-text {
 		margin-left: 5px;
 	}
 }
+
+.pagination {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+}
+
+.pagination .current,
+.pagination .page a,
+.pagination .previous a,
+.pagination .first a,
+.pagination .next a,
+.pagination .last a {
+	display: inline-block;
+	font-size: 16px;
+	font-weight: 600;
+	padding: 5px 15px;
+	color: #ffffff;
+	text-align: center;
+	border-radius: 50px;
+	background-image: -webkit-gradient(linear, left top, right top, from(#ee8425), to(#f9488b)), -webkit-gradient(linear, left top, right top, from(#ee8425), to(#f9488b));
+	background-image: -o-linear-gradient(left, #ee8425 0%, #f9488b 100%), -o-linear-gradient(left, #ee8425 0%, #f9488b 100%);
+	background-image: linear-gradient(to right, #ee8425 0%, #f9488b 100%), linear-gradient(to right, #ee8425 0%, #f9488b 100%);
+	text-decoration: none;
+	transition: background-color 0.3s ease;
+}
+
+.pagination .current {
+	background-image: -webkit-gradient(linear, left top, right top, from(#d37220), to(#d33d73)), -webkit-gradient(linear, left top, right top, from(#d37220), to(#d33d73));
+	background-image: -o-linear-gradient(left, #d37220 0%, #d33d73 100%), -o-linear-gradient(left, #d37220 0%, #d33d73 100%);
+	background-image: linear-gradient(to right, #d37220 0%, #d33d73 100%), linear-gradient(to right, #d37220 0%, #d33d73 100%);
+}
+
+.pagination .page a:hover,
+.pagination .next a:hover,
+.pagination .previous a:hover,
+.pagination .first a:hover,
+.pagination .last a:hover {
+	background-image: -webkit-gradient(linear, left top, right top, from(#d37220), to(#d33d73)), -webkit-gradient(linear, left top, right top, from(#d37220), to(#d33d73));
+	background-image: -o-linear-gradient(left, #d37220 0%, #d33d73 100%), -o-linear-gradient(left, #d37220 0%, #d33d73 100%);
+	background-image: linear-gradient(to right, #d37220 0%, #d33d73 100%), linear-gradient(to right, #d37220 0%, #d33d73 100%);
+}
+
+.pagination .page a:active,
+.pagination .next a:active,
+.pagination .previous a:active,
+.pagination .first a:active,
+.pagination .last a:active {
+	background-image: -webkit-gradient(linear, left top, right top, from(#b8601b), to(#b92f61)), -webkit-gradient(linear, left top, right top, from(#b8601b), to(#b92f61));
+	background-image: -o-linear-gradient(left, #b8601b 0%, #b92f61 100%), -o-linear-gradient(left, #b8601b 0%, #b92f61 100%);
+	background-image: linear-gradient(to right, #b8601b 0%, #b92f61 100%), linear-gradient(to right, #b8601b 0%, #b92f61 100%);
+}
