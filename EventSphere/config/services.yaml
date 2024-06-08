@@ -31,3 +31,7 @@ services:
     App\Service\EventService:
         arguments:
             $subscriptionRepository: '@App\Repository\SubscriptionRepository'
+
+    App\Security\EventVoter:
+        tags:
+            - { name: 'security.voter' }
