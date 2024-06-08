@@ -30,11 +30,17 @@ class SubscriptionController extends AbstractController
 
         switch ($result) {
             case 'success':
+                $htmlContent = $this->renderView('emails/subscription.html.twig', [
+                    'firstName' => $user->getFirstName(),
+                    'eventTitle' => $event->getTitle(),
+                    'eventDateTime' => $event->getDateTime(),
+                    'maxParticipants' => $event->getMaxParticipants(),
+                ]);
                 $this->mailerService->sendEmail(
                     $user->getEmail(),
                     $user->getFirstName(),
                     'Event Subscription Confirmation',
-                    sprintf('<p>You have successfully subscribed to the event: %s</p>', $event->getTitle())
+                    $htmlContent
                 );
 
                 $this->addFlash('success', 'You have successfully subscribed to the event.');
@@ -64,13 +70,17 @@ class SubscriptionController extends AbstractController
         $user = $this->getUser();
 
         if ($this->subscriptionService->unsubscribe($user, $event)) {
+            $htmlContent = $this->renderView('emails/unsubscription.html.twig', [
+                'firstName' => $user->getFirstName(),
+                'eventTitle' => $event->getTitle(),
+            ]);
             $this->mailerService->sendEmail(
                 $user->getEmail(),
                 $user->getFirstName(),
                 'Event Unsubscription Confirmation',
-                sprintf('<p>You have successfully unsubscribed from the event: %s</p>', $event->getTitle())
+                $htmlContent
             );
-            
+
             $this->addFlash('success', 'You have successfully unsubscribed from the event ' . $event->getTitle() . '.');
         } else {
             $this->addFlash('error', 'Unable to unsubscribe from the event. You might not be subscribed.');

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+        .header img {
+            max-width: 100px;
+        }
+        .content {
+            text-align: center;
+        }
+        .content h1 {
+            color: #f48c42;
+        }
+        .content p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .footer {
+            text-align: center;
+            padding-top: 20px;
+        }
+        .footer p {
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            {# <img src="https://example.com/logo.png" alt="Logo"> #}
+            <img src="{{ asset("custom/img/RBG_EventSphere.png") }}" alt="" style="border-radius: 50%; padding-top:10px; padding-bottom:10px">
+        </div>
+        <div class="content">
+            <h1>Welcome Aboard!</h1>
+            <p>Hey {{ firstName }},</p>
+            <p>We're thrilled to have you join our event <strong>{{ eventTitle }}</strong>! Get ready for an amazing time.</p>
+            <p>Here's what you need to know:</p>
+            <ul>
+                <li><strong>Event:</strong> {{ eventTitle }}</li>
+                <li><strong>Date & Time:</strong> {{ eventDateTime|date('M d, Y H:i') }}</li>
+                <li><strong>Max Participants:</strong> {{ maxParticipants }}</li>
+            </ul>
+            <p>We can't wait to see you there!</p>
+            <p><em>P.S. Don't forget to bring your smile :)</em></p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2024 EventSphere. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
