@@ -12,40 +12,44 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function home(EventRepository $repository): Response
     {
-        $currentDate = new \DateTime();
+        $currentDateTime = new \DateTime();
         $events = $repository->findAll();
 
         $todayEvents = [];
         $tomorrowEvents = [];
         $dayAfterTomorrowEvents = [];
         $threeDaysLaterEvents = [];
+        $pastEvents = [];
 
-        $today = (clone $currentDate)->format('Y-m-d');
-        $tomorrow = (clone $currentDate)->modify('+1 day')->format('Y-m-d');
-        $dayAfterTomorrow = (clone $currentDate)->modify('+2 days')->format('Y-m-d');
-        $threeDaysLater = (clone $currentDate)->modify('+3 days')->format('Y-m-d');
+        $today = (clone $currentDateTime)->setTime(0, 0);
+        $tomorrow = (clone $today)->modify('+1 day');
+        $dayAfterTomorrow = (clone $today)->modify('+2 days');
+        $threeDaysLater = (clone $today)->modify('+3 days');
 
         foreach ($events as $event) {
-            $eventDate = $event->getDateTime()->format('Y-m-d');
-            if ($eventDate == $today) {
+            $eventDateTime = $event->getDateTime();
+
+            if ($eventDateTime < $currentDateTime) {
+                $pastEvents[] = $event;
+            } elseif ($eventDateTime >= $today && $eventDateTime < $tomorrow) {
                 $todayEvents[] = $event;
-            } elseif ($eventDate == $tomorrow) {
+            } elseif ($eventDateTime >= $tomorrow && $eventDateTime < $dayAfterTomorrow) {
                 $tomorrowEvents[] = $event;
-            } elseif ($eventDate == $dayAfterTomorrow) {
+            } elseif ($eventDateTime >= $dayAfterTomorrow && $eventDateTime < $threeDaysLater) {
                 $dayAfterTomorrowEvents[] = $event;
-            } elseif ($eventDate == $threeDaysLater) {
+            } elseif ($eventDateTime >= $threeDaysLater && $eventDateTime < (clone $threeDaysLater)->modify('+1 day')) {
                 $threeDaysLaterEvents[] = $event;
             }
         }
 
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
-            'events' => $events,
+            'pastEvents' => $pastEvents,
             'todayEvents' => $todayEvents,
             'tomorrowEvents' => $tomorrowEvents,
             'dayAfterTomorrowEvents' => $dayAfterTomorrowEvents,
             'threeDaysLaterEvents' => $threeDaysLaterEvents,
-            'currentDate' => new \DateTime(), // Pass current date again for use in the template
+            'currentDate' => $currentDateTime,
         ]);
     }
 }
