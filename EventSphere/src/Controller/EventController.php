@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\EventRepository;
 use App\Repository\SubscriptionRepository;
@@ -116,6 +117,56 @@ class EventController extends AbstractController
             'pagination' => $pagination,
         ]);
     }
+
+    #[Route('/event/edit/{id}', name: 'event_edit')]
+    public function edit(Event $event, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        // Check if the user is the creator of the event
+        if ($event->getCreator() !== $user) {
+            $this->addFlash('error', 'You do not have permission to edit this event.');
+            return $this->redirectToRoute('manage_events');
+        }
+
+        $form = $this->createForm(EventFormType::class, $event);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($event);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Event updated successfully.');
+
+            return $this->redirectToRoute('manage_events');
+        }
+
+        return $this->render('event/edit.html.twig', [
+            'eventForm' => $form->createView(),
+        ]);
+    }
+
+
+    #[Route('/event/delete/{id}', name: 'event_delete', methods: ['POST'])]
+    public function delete(Event $event, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $user = $this->getUser();
+
+        if ($event->getCreator() !== $user) {
+            return new JsonResponse(['success' => false, 'message' => 'You do not have permission to delete this event.']);
+        }
+
+        // Validate the CSRF token
+        if (!$this->isCsrfTokenValid('delete' . $event->getId(), $request->request->get('_token'))) {
+            return new JsonResponse(['success' => false, 'message' => 'Invalid CSRF token.']);
+        }
+
+        $entityManager->remove($event);
+        $entityManager->flush();
+
+        return new JsonResponse(['success' => true, 'message' => 'Event deleted successfully.']);
+    }
+
 
 }
 
