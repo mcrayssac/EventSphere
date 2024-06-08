@@ -53,12 +53,37 @@ class EventController extends AbstractController
     {
         $isAuthenticated = $security->isGranted('IS_AUTHENTICATED_FULLY');
 
+        $date = $request->query->get('date');
+        $remainingPlaces = $request->query->get('remainingPlaces');
+        $isPublic = $request->query->get('isPublic');
+        $search = $request->query->get('search');
+
         $queryBuilder = $eventRepository->createQueryBuilder('e')
             ->orderBy('e.dateTime', 'DESC');
 
         if (!$isAuthenticated) {
-            $queryBuilder->where('e.isPublic = :isPublic')
+            $queryBuilder->andWhere('e.isPublic = :isPublic')
                 ->setParameter('isPublic', true);
+        }
+
+        if (!empty($date)) {
+            $queryBuilder->andWhere('e.dateTime >= :date')
+                ->setParameter('date', new \DateTime($date));
+        }
+
+        if (!empty($remainingPlaces)) {
+            $queryBuilder->andWhere('e.id IN (:eventsWithRemainingPlaces)')
+                ->setParameter('eventsWithRemainingPlaces', $this->eventService->filterEventsByRemainingPlaces($remainingPlaces));
+        }
+
+        if ($isPublic !== null && $isPublic !== '') {
+            $queryBuilder->andWhere('e.isPublic = :isPublicFilter')
+                ->setParameter('isPublicFilter', $isPublic);
+        }
+
+        if (!empty($search)) {
+            $queryBuilder->andWhere('e.title LIKE :search OR e.description LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
         }
 
         $pagination = $paginator->paginate(

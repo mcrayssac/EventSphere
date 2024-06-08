@@ -159,11 +159,6 @@ class Event
         return $this;
     }
 
-    public function getRemainingPlaces(): int
-    {
-        return $this->maxParticipants - $this->subscriptions->count();
-    }
-
     public function getCreator(): ?User
     {
         return $this->creator;

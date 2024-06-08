@@ -12,6 +12,44 @@
                     <p><i class="fas fa-user-astronaut"></i> Find your next adventure - whether it’s binge-watching or bungee-jumping!</p>
                 </div>
 
+                <div class="col-md-12 text-center mb-3">
+                    <button class="site-btn collapsed" type="button" data-toggle="collapse" data-target="#filterForm" aria-expanded="false" aria-controls="filterForm">
+                        <span class="collapsed-text"><i class="fas fa-filter"></i> Show filters</span>
+                        <span class="expanded-text"><i class="fas fa-filter-circle-xmark"></i> Hide filters</span>
+                    </button>
+                </div>
+
+                <div class="collapse" id="filterForm">
+                    <form method="get" action="{{ path('app_events') }}" class="comment-form contact-form mb-4">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="date"><i class="fas fa-calendar-day"></i> Date of event (exact)</label>
+                                <input type="date" name="date" class="form-control" value="{{ app.request.query.get('date') }}">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="remainingPlaces"><i class="fas fa-list-ol"></i> Remaining Places (min)</label>
+                                <input type="number" name="remainingPlaces" class="form-control" placeholder="1, 10, 100..." value="{{ app.request.query.get('remainingPlaces') }}" min="0">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="isPublic"><i class="fas fa-unlock"></i> Type of event</label>
+                                <select name="isPublic" class="form-control">
+                                    <option value="">Public/Private</option>
+                                    <option value="1" {{ app.request.query.get('isPublic') == '1' ? 'selected' : '' }}>Public</option>
+                                    <option value="0" {{ app.request.query.get('isPublic') == '0' ? 'selected' : '' }}>Private</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="search"><i class="fas fa-magnifying-glass"></i> Search</label>
+                                <input type="text" name="search" class="form-control" placeholder="Space adventure..." value="{{ app.request.query.get('search') }}">
+                            </div>
+                            <div class="col-md-12 text-center">
+                                <button type="submit" class="site-btn"><i class="fas fa-check"></i> Apply</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
                 <div class="schedule-tab">
                     <div class="tab-content">
                         <div class="tab-pane active" id="tabs-0" role="tabpanel">
