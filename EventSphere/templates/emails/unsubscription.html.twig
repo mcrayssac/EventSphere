@@ -22,13 +22,14 @@
             text-align: center;
             padding-bottom: 20px;
         }
-        .header img {
-            max-width: 100px;
+        .header h1 {
+            color: #f48c42;
+            text-weight: bold;
         }
         .content {
             text-align: center;
         }
-        .content h1 {
+        .content h2 {
             color: #f48c42;
         }
         .content p {
@@ -48,11 +49,10 @@
 <body>
     <div class="container">
         <div class="header">
-            {# <img src="https://example.com/logo.png" alt="Logo"> #}
-            <img src="{{ asset("custom/img/RBG_EventSphere.png") }}" alt="" style="border-radius: 50%; padding-top:10px; padding-bottom:10px">
+            <h1>Event Sphere</h1>
         </div>
         <div class="content">
-            <h1>Goodbye for Now!</h1>
+            <h2>Goodbye for Now!</h2>
             <p>Hi {{ firstName }},</p>
             <p>We're sorry to see you go from the event <strong>{{ eventTitle }}</strong>. We hope to see you back at our future events!</p>
             <p>Remember, the fun never stops at EventSphere. Stay tuned for more exciting events!</p>
