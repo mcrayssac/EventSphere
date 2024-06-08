@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Form\EventFormType;
+use App\Service\EventService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +18,13 @@ use Symfony\Component\Security\Core\Security;
 
 class EventController extends AbstractController
 {
+    private $eventService;
+
+    public function __construct(EventService $eventService)
+    {
+        $this->eventService = $eventService;
+    }
+
     #[Route('/event/create', name: 'event_create')]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -60,7 +68,7 @@ class EventController extends AbstractController
         );
 
         foreach ($pagination as $event) {
-            $event->remainingPlaces = $event->getRemainingPlaces();
+            $event->remainingPlaces = $this->eventService->getRemainingPlaces($event);
         }
 
         return $this->render('event/list.html.twig', [
@@ -82,7 +90,7 @@ class EventController extends AbstractController
 
         $user = $this->getUser();
         $isSubscribed = $subscriptionRepository->findOneBy(['user' => $user, 'event' => $event]);
-        $remainingPlaces = $event->getRemainingPlaces();
+        $remainingPlaces = $this->eventService->getRemainingPlaces($event);
 
         return $this->render('event/detail.html.twig', [
             'event' => $event,
@@ -110,7 +118,7 @@ class EventController extends AbstractController
         );
 
         foreach ($pagination as $event) {
-            $event->remainingPlaces = $event->getRemainingPlaces();
+            $event->remainingPlaces = $this->eventService->getRemainingPlaces($event);
         }
 
         return $this->render('event/manage.html.twig', [

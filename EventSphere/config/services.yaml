@@ -27,3 +27,7 @@ services:
         arguments:
             $mailjetApiKey: '%env(MAILJET_API_KEY)%'
             $mailjetApiSecret: '%env(MAILJET_API_SECRET)%'
+    
+    App\Service\EventService:
+        arguments:
+            $subscriptionRepository: '@App\Repository\SubscriptionRepository'
