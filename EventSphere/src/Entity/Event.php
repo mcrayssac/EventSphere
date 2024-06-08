@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
@@ -48,6 +50,16 @@ class Event
      * @Assert\NotNull
      */
     private $isPublic;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Subscription", mappedBy="event")
+     */
+    private $subscriptions;
+
+    public function __construct()
+    {
+        $this->subscriptions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -112,5 +124,37 @@ class Event
         $this->isPublic = $isPublic;
 
         return $this;
+    }
+
+    public function getSubscriptions(): Collection
+    {
+        return $this->subscriptions;
+    }
+
+    public function addSubscription(Subscription $subscription): self
+    {
+        if (!$this->subscriptions->contains($subscription)) {
+            $this->subscriptions[] = $subscription;
+            $subscription->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscription(Subscription $subscription): self
+    {
+        if ($this->subscriptions->removeElement($subscription)) {
+            // set the owning side to null (unless already changed)
+            if ($subscription->getEvent() === $this) {
+                $subscription->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getRemainingPlaces(): int
+    {
+        return $this->maxParticipants - $this->subscriptions->count();
     }
 }

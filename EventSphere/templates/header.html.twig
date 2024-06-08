@@ -15,8 +15,8 @@
                     <li class="{{ app.request.get('_route') == 'app_home' ? 'active' : '' }}"><a href="{{ path('app_home') }}"><i class="fas fa-house"></i> Home</a></li>
                     <li class="{{ app.request.get('_route') == 'event_create' ? 'active' : '' }}"><a href="{{ path('event_create') }}"><i class="fas fa-calendar-plus"></i> Create</a></li>
                     <li class="{{ app.request.get('_route') == 'app_events' ? 'active' : '' }}"><a href="{{ path('app_events') }}"><i class="fas fa-calendar-week"></i> Events</a></li>
-                    <li><a href="./subcription.html"><i class="fas fa-bookmark"></i> Subcription</a></li>
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <li class="{{ app.request.get('_route') == 'user_events' ? 'active' : '' }}"><a href="{{ path('user_events') }}"><i class="fas fa-bookmark"></i> Subcription</a></li>
                         <li class="{{ app.request.get('_route') == 'app_profile' ? 'active' : '' }}"><a href="{{ path('app_profile') }}"><i class="fas fa-id-badge"></i> Your Profile</a></li>
                     {% endif %}
                 </ul>

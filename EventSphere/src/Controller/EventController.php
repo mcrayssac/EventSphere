@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\EventRepository;
+use App\Repository\SubscriptionRepository;
 use Knp\Component\Pager\PaginatorInterface;
 
 class EventController extends AbstractController
@@ -47,13 +48,17 @@ class EventController extends AbstractController
             10 // Number of items per page
         );
 
+        foreach ($pagination as $event) {
+            $event->remainingPlaces = $event->getRemainingPlaces();
+        }
+
         return $this->render('event/list.html.twig', [
             'pagination' => $pagination,
         ]);
     }
 
     #[Route('/event/{id}', name: 'app_event_detail')]
-    public function show(int $id, EventRepository $eventRepository): Response
+    public function show(int $id, EventRepository $eventRepository, SubscriptionRepository $subscriptionRepository): Response
     {
         $event = $eventRepository->find($id);
         if (!$event) {
@@ -62,8 +67,12 @@ class EventController extends AbstractController
 
         $this->denyAccessUnlessGranted('view', $event);
 
+        $user = $this->getUser();
+        $isSubscribed = $subscriptionRepository->findOneBy(['user' => $user, 'event' => $event]);
+
         return $this->render('event/detail.html.twig', [
             'event' => $event,
+            'isSubscribed' => $isSubscribed,
         ]);
     }
 }
