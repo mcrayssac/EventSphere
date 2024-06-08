@@ -23,11 +23,26 @@ class SubscriptionController extends AbstractController
     public function subscribe(Event $event, Request $request): Response
     {
         $user = $this->getUser();
+        $result = $this->subscriptionService->subscribe($user, $event);
 
-        if ($this->subscriptionService->subscribe($user, $event)) {
-            $this->addFlash('success', 'You have successfully subscribed to the event.');
-        } else {
-            $this->addFlash('error', 'Unable to subscribe to the event. It might be full or you are already subscribed.');
+        switch ($result) {
+            case 'success':
+                $this->addFlash('success', 'You have successfully subscribed to the event.');
+                break;
+            case 'event_passed':
+                // This should never show because we hide the subscribe button if the event has already passed but just in case
+                $this->addFlash('error', 'Unable to subscribe to the event. The event has already passed.');
+                break;
+            case 'max_participants':
+                $this->addFlash('error', 'Unable to subscribe to the event. The maximum number of participants has been reached.');
+                break;
+            case 'already_subscribed':
+                // This should never show because we hide the subscribe button if the user is already subscribed but just in case
+                $this->addFlash('error', 'Unable to subscribe to the event. You are already subscribed.');
+                break;
+            default:
+                $this->addFlash('error', 'Unable to subscribe to the event. An unknown error occurred.');
+                break;
         }
 
         return $this->redirectToRoute('app_event_detail', ['id' => $event->getId()]);

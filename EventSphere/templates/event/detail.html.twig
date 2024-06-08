@@ -56,11 +56,17 @@
                                     </ul>
 
                                     <div class="ha-text pt-0">
-                                        {% if isSubscribed %}
-                                            <a href="{{ path('event_unsubscribe', { 'id': event.id }) }}" class="ha-btn"><i class="fas fa-times-circle"></i> Unsubscribe</a>
-                                        {% else %}
-                                            <a href="{{ path('event_subscribe', { 'id': event.id }) }}" class="ha-btn"><i class="fas fa-file-signature"></i> Subscribe</a>
-                                        {% endif %}
+                                        <div class="ha-text pt-0">
+                                            {% if isSubscribed %}
+                                                <a href="{{ path('event_unsubscribe', { 'id': event.id }) }}" class="ha-btn"><i class="fas fa-times-circle"></i> Unsubscribe</a>
+                                            {% else %}
+                                                {% if remainingPlaces > 0 %}
+                                                    <a href="{{ path('event_subscribe', { 'id': event.id }) }}" class="ha-btn"><i class="fas fa-file-signature"></i> Subscribe</a>
+                                                {% else %}
+                                                    <p class="text-danger">No remaining places available.</p>
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

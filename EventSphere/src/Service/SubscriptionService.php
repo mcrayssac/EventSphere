@@ -19,30 +19,35 @@ class SubscriptionService
         $this->entityManager = $entityManager;
     }
 
-    public function subscribe(User $user, Event $event): bool
+    public function subscribe(User $user, Event $event): string
     {
+        $now = new \DateTime();
+
+        // Check if the event has already passed
+        if ($event->getDateTime() < $now) {
+            return 'event_passed';
+        }
+
         // Check if the event has reached its max participants
         if (count($event->getSubscriptions()) >= $event->getMaxParticipants()) {
-            return false; // Max participants reached
+            return 'max_participants';
         }
 
         // Check if the user is already subscribed to the event
         foreach ($event->getSubscriptions() as $subscription) {
             if ($subscription->getUser() === $user) {
-                return false; // User is already subscribed
+                return 'already_subscribed';
             }
         }
 
-        // Create a new subscription
         $subscription = new Subscription();
         $subscription->setUser($user);
         $subscription->setEvent($event);
 
-        // Persist the subscription
         $this->entityManager->persist($subscription);
         $this->entityManager->flush();
 
-        return true;
+        return 'success';
     }
 
     public function unsubscribe(User $user, Event $event): bool
