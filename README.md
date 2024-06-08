@@ -1,6 +1,9 @@
 # EventSphere
 EventSphere: Simplified Event Management in Symfony
 
+## Notion todo tasks
+[Notion todo tasks](https://www.notion.so/EventSphere-symfony-project-510f6a189f48422fbd4379a07b8b9e0c?pvs=4)
+
 ## Installation
 ```bash
 docker-compose up -d --build
@@ -65,4 +68,14 @@ npm install --save-dev sass-loade^14.0.0 sass
 ```
 ```bash
 npm run dev
+```
+
+## Dev users
+```text
+email: user@example.com
+password: userpwd123
+```
+```text
+email: admin@example.com
+password: adminpwd123
 ```

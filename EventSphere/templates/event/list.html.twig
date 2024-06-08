@@ -33,6 +33,7 @@
                                         <ul class="sc-widget">
                                             <li><i class="fas fa-clock"></i> {{ event.dateTime|date('M d, Y H:i') }}</li>
                                             <li><i class="fas fa-user"></i> Remaining places: {{ event.remainingPlaces }}</li>
+                                            <li><i class="fa fa-{{ event.isPublic ? 'lock-open' : 'lock' }}"></i> {{ event.isPublic ? 'Public' : 'Private' }}</li>
                                         </ul>
                                     </div>
                                 </div>
