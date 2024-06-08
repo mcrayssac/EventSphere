@@ -12,6 +12,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^2.19",
         "knplabs/knp-paginator-bundle": "^6.2",
+        "mailjet/mailjet-apiv3-php": "^1.6",
         "sensio/framework-extra-bundle": "*",
         "symfony/asset": "6.0.*",
         "symfony/console": "6.0.*",

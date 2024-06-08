@@ -9,14 +9,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use App\Service\MailerService;
 
 class SubscriptionController extends AbstractController
 {
     private $subscriptionService;
+    private $mailerService;
 
-    public function __construct(SubscriptionService $subscriptionService)
+    public function __construct(SubscriptionService $subscriptionService, MailerService $mailerService)
     {
         $this->subscriptionService = $subscriptionService;
+        $this->mailerService = $mailerService;
     }
 
     #[Route('/event/subscribe/{id}', name: 'event_subscribe')]
@@ -27,6 +30,13 @@ class SubscriptionController extends AbstractController
 
         switch ($result) {
             case 'success':
+                $this->mailerService->sendEmail(
+                    $user->getEmail(),
+                    $user->getFirstName(),
+                    'Event Subscription Confirmation',
+                    sprintf('<p>You have successfully subscribed to the event: %s</p>', $event->getTitle())
+                );
+
                 $this->addFlash('success', 'You have successfully subscribed to the event.');
                 break;
             case 'event_passed':
@@ -54,6 +64,13 @@ class SubscriptionController extends AbstractController
         $user = $this->getUser();
 
         if ($this->subscriptionService->unsubscribe($user, $event)) {
+            $this->mailerService->sendEmail(
+                $user->getEmail(),
+                $user->getFirstName(),
+                'Event Unsubscription Confirmation',
+                sprintf('<p>You have successfully unsubscribed from the event: %s</p>', $event->getTitle())
+            );
+            
             $this->addFlash('success', 'You have successfully unsubscribed from the event ' . $event->getTitle() . '.');
         } else {
             $this->addFlash('error', 'Unable to unsubscribe from the event. You might not be subscribed.');
