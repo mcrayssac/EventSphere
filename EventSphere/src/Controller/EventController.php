@@ -69,6 +69,8 @@ class EventController extends AbstractController
     public function show(int $id, EventRepository $eventRepository, SubscriptionRepository $subscriptionRepository): Response
     {
         $event = $eventRepository->find($id);
+        $currentTime = new \DateTime();
+
         if (!$event) {
             throw $this->createNotFoundException('Event not found.');
         }
@@ -83,6 +85,7 @@ class EventController extends AbstractController
             'event' => $event,
             'isSubscribed' => $isSubscribed,
             'remainingPlaces' => $remainingPlaces,
+            'currentTime' => $currentTime,
         ]);
     }
 }
