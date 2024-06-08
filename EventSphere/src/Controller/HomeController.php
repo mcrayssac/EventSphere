@@ -6,14 +6,25 @@ use App\Repository\EventRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function home(EventRepository $repository): Response
+    public function home(EventRepository $repository, Security $security): Response
     {
+        $isAuthenticated = $security->isGranted('IS_AUTHENTICATED_FULLY');
+
         $currentDateTime = new \DateTime();
-        $events = $repository->findAll();
+        $queryBuilder = $repository->createQueryBuilder('e')
+            ->orderBy('e.dateTime', 'DESC');
+
+        if (!$isAuthenticated) {
+            $queryBuilder->where('e.isPublic = :isPublic')
+                ->setParameter('isPublic', true);
+        }
+
+        $events = $queryBuilder->getQuery()->getResult();
 
         $todayEvents = [];
         $tomorrowEvents = [];
