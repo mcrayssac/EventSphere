@@ -51,7 +51,7 @@
                                     <ul class="sc-widget pb-5 pt-0">
                                         <li><i class="fa fa-clock"></i> {{ event.dateTime|date('M d, Y H:i') }}</li>
                                         <li><i class="fa fa-users"></i> Max participants: <b>{{ event.maxParticipants }}</b></li>
-                                        <li><i class="fa fa-user"></i> Remaining places: <b>{{ event.remainingPlaces }}</b></li>
+                                        <li><i class="fa fa-user"></i> Remaining places: <b>{{ remainingPlaces }}</b></li>
                                         <li><i class="fa fa-{{ event.isPublic ? 'lock-open' : 'lock' }}"></i> {{ event.isPublic ? 'Public' : 'Private' }}</li>
                                     </ul>
 
@@ -62,7 +62,7 @@
                                             {% if isSubscribed %}
                                                 <a href="{{ path('event_unsubscribe', { 'id': event.id }) }}" class="ha-btn"><i class="fas fa-times-circle"></i> Unsubscribe</a>
                                             {% else %}
-                                                {% if event.remainingPlaces > 0 %}
+                                                {% if remainingPlaces > 0 %}
                                                     <a href="{{ path('event_subscribe', { 'id': event.id }) }}" class="ha-btn"><i class="fas fa-file-signature"></i> Subscribe</a>
                                                 {% else %}
                                                     <p class="text-danger">No remaining places available.</p>

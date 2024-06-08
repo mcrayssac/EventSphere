@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\EventRepository;
+use App\Service\EventService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -10,6 +11,13 @@ use Symfony\Component\Security\Core\Security;
 
 class HomeController extends AbstractController
 {
+    private $eventService;
+
+    public function __construct(EventService $eventService)
+    {
+        $this->eventService = $eventService;
+    }
+
     #[Route('/', name: 'app_home')]
     public function home(EventRepository $repository, Security $security): Response
     {
@@ -38,6 +46,8 @@ class HomeController extends AbstractController
         $threeDaysLater = (clone $today)->modify('+3 days');
 
         foreach ($events as $event) {
+            $event->remainingPlaces = $this->eventService->getRemainingPlaces($event);
+
             $eventDateTime = $event->getDateTime();
 
             if ($eventDateTime < $currentDateTime) {
