@@ -69,10 +69,12 @@ class EventController extends AbstractController
 
         $user = $this->getUser();
         $isSubscribed = $subscriptionRepository->findOneBy(['user' => $user, 'event' => $event]);
+        $remainingPlaces = $event->getRemainingPlaces();
 
         return $this->render('event/detail.html.twig', [
             'event' => $event,
             'isSubscribed' => $isSubscribed,
+            'remainingPlaces' => $remainingPlaces,
         ]);
     }
 }
