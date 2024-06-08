@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\EventRepository;
 use App\Repository\SubscriptionRepository;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\Security\Core\Security;
 
 class EventController extends AbstractController
 {
@@ -37,10 +38,17 @@ class EventController extends AbstractController
     }
 
     #[Route('/events', name: 'app_events')]
-    public function list(EventRepository $eventRepository, PaginatorInterface $paginator, Request $request): Response
+    public function list(EventRepository $eventRepository, PaginatorInterface $paginator, Request $request, Security $security): Response
     {
+        $isAuthenticated = $security->isGranted('IS_AUTHENTICATED_FULLY');
+
         $queryBuilder = $eventRepository->createQueryBuilder('e')
             ->orderBy('e.dateTime', 'DESC');
+
+        if (!$isAuthenticated) {
+            $queryBuilder->where('e.isPublic = :isPublic')
+                ->setParameter('isPublic', true);
+        }
 
         $pagination = $paginator->paginate(
             $queryBuilder,

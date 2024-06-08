@@ -53,6 +53,9 @@ composer require form
 ```bash
 composer require knplabs/knp-paginator-bundle
 ```
+```bash
+composer require mailjet/mailjet-apiv3-php
+```
 
 ## Yarn install
 ```bash
