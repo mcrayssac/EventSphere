@@ -5,37 +5,36 @@ namespace App\Security;
 use App\Entity\Event;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class EventVoter extends Voter
 {
-    const VIEW = 'view';
-
-    private $security;
-
-    public function __construct(Security $security)
-    {
-        $this->security = $security;
-    }
-
     protected function supports(string $attribute, $subject): bool
     {
-        return $attribute === self::VIEW && $subject instanceof Event;
+        return in_array($attribute, ['view'])
+            && $subject instanceof Event;
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
-        if (!$subject instanceof Event) {
+        if (!$user instanceof UserInterface) {
             return false;
         }
 
-        if ($subject->getIsPublic()) {
-            return true;
+        /** @var Event $event */
+        $event = $subject;
+
+        switch ($attribute) {
+            case 'view':
+                if ($event->getIsPublic()) {
+                    return true;
+                }
+
+                return $user instanceof UserInterface;
         }
 
-        return $this->security->isGranted('IS_AUTHENTICATED_FULLY');
+        return false;
     }
 }
-
