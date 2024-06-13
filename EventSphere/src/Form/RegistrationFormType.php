@@ -10,40 +10,16 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Regex;
 
 class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('firstName', TextType::class, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter your first name',
-                    ]),
-                ],
-            ])
-            ->add('lastName', TextType::class, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter your last name',
-                    ]),
-                ],
-            ])
-            ->add('email', EmailType::class, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter an email',
-                    ]),
-                    new Regex([
-                        'pattern' => '/^[^\s@]{3,}@[^\s@]{3,}\.[^\s@]{2,}$/',
-                        'message' => 'The email format should be xxx@yyy.zz'
-                    ]),
-                ],
-            ])
+            ->add('firstName', TextType::class)
+            ->add('lastName', TextType::class)
+            ->add('email', EmailType::class)
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'The password fields must match.',
@@ -54,14 +30,6 @@ class RegistrationFormType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter a password',
-                    ]),
-                    new Length([
-                        'min' => 8,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                    ]),
-                    new Regex([
-                        'pattern' => '/^(?=.*[a-zA-Z])(?=.*\d).+$/',
-                        'message' => 'Your password must contain both letters and numbers'
                     ]),
                 ],
             ]);

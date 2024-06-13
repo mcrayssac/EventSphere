@@ -19,39 +19,12 @@ class EventFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a title',
-                    ]),
-                ],
-            ])
-            ->add('description', TextareaType::class, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a description',
-                    ]),
-                ],
-            ])
+            ->add('title', TextType::class)
+            ->add('description', TextareaType::class)
             ->add('dateTime', DateTimeType::class, [
                 'widget' => 'single_text',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a date and time',
-                    ]),
-                    new GreaterThan([
-                        'value' => 'now',
-                        'message' => 'The date must be in the future',
-                    ]),
-                ],
             ])
-            ->add('maxParticipants', IntegerType::class, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter the maximum number of participants',
-                    ]),
-                ],
-            ])
+            ->add('maxParticipants', IntegerType::class)
             ->add('isPublic', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Public Event'

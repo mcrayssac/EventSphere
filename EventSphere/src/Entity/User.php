@@ -62,7 +62,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $roles = [];
 
     /**
-     * @Assert\NotBlank(groups={"update"})
      * @Assert\Length(min=8, minMessage="Your password should be at least 8 characters")
      * @Assert\Regex(
      *     pattern="/^(?=.*[a-zA-Z])(?=.*\d).+$/",

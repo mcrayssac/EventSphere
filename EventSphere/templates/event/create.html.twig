@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                {{ form_widget(eventForm.maxParticipants, {'attr': {'class': 'form-control', 'placeholder': 'Max participants'}}) }}
+                                {{ form_widget(eventForm.maxParticipants, {'attr': {'class': 'form-control', 'placeholder': 'Max participants', 'min': '0'}}) }}
                                 {{ form_errors(eventForm.maxParticipants) }}
                             </div>
                         </div>
