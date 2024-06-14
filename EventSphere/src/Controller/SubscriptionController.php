@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Event;
 use App\Service\SubscriptionService;
 use App\Repository\SubscriptionRepository;
+use App\Service\EventService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,11 +16,13 @@ class SubscriptionController extends AbstractController
 {
     private $subscriptionService;
     private $mailerService;
+    private $eventService;
 
-    public function __construct(SubscriptionService $subscriptionService, MailerService $mailerService)
+    public function __construct(SubscriptionService $subscriptionService, MailerService $mailerService, EventService $eventService)
     {
         $this->subscriptionService = $subscriptionService;
         $this->mailerService = $mailerService;
+        $this->eventService = $eventService;
     }
 
     #[Route('/event/subscribe/{id}', name: 'event_subscribe')]
@@ -90,11 +93,15 @@ class SubscriptionController extends AbstractController
     }
 
     #[Route('/my-events', name: 'user_events')]
-    public function showUserEvents(SubscriptionRepository $subscriptionRepository): Response
+    public function showUserEvents(SubscriptionRepository $subscriptionRepository, EventService $eventService): Response
     {
         $user = $this->getUser();
         $subscriptions = $subscriptionRepository->findBy(['user' => $user]);
         $events = array_map(fn($subscription) => $subscription->getEvent(), $subscriptions);
+
+        foreach ($events as $event) {
+            $event->remainingPlaces = $eventService->getRemainingPlaces($event);
+        }    
 
         return $this->render('subscription/index.html.twig', [
             'events' => $events,

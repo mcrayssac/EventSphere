@@ -11,5 +11,8 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - APP_ENV=dev
       - DATABASE_URL=sqlite:///%kernel.project_dir%/var/data.db
+      # - APP_ENV=dev
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
