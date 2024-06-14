@@ -154,13 +154,8 @@ class EventController extends AbstractController
     #[Route('/event/edit/{id}', name: 'event_edit')]
     public function edit(Event $event, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $user = $this->getUser();
 
-        // Check if the user is the creator of the event
-        if ($event->getCreator() !== $user) {
-            $this->addFlash('error', 'You do not have permission to edit this event.');
-            return $this->redirectToRoute('manage_events');
-        }
+        $this->denyAccessUnlessGranted('edit', $event);
 
         $form = $this->createForm(EventFormType::class, $event);
         $form->handleRequest($request);
@@ -183,11 +178,7 @@ class EventController extends AbstractController
     #[Route('/event/delete/{id}', name: 'event_delete', methods: ['POST'])]
     public function delete(Event $event, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $user = $this->getUser();
-
-        if ($event->getCreator() !== $user) {
-            return new JsonResponse(['success' => false, 'message' => 'You do not have permission to delete this event.']);
-        }
+        $this->denyAccessUnlessGranted('delete', $event);
 
         // Validate the CSRF token
         if (!$this->isCsrfTokenValid('delete' . $event->getId(), $request->request->get('_token'))) {

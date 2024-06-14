@@ -9,9 +9,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class EventVoter extends Voter
 {
+    const VIEW = 'view';
+    const EDIT = 'edit';
+    const DELETE = 'delete';
+
     protected function supports(string $attribute, $subject): bool
     {
-        return in_array($attribute, ['view'])
+        return in_array($attribute, [self::VIEW, self::EDIT, self::DELETE])
             && $subject instanceof Event;
     }
 
@@ -27,14 +31,27 @@ class EventVoter extends Voter
         $event = $subject;
 
         switch ($attribute) {
-            case 'view':
-                if ($event->getIsPublic()) {
-                    return true;
-                }
-
-                return $user instanceof UserInterface;
+            case self::VIEW:
+                return $this->canView($event, $user);
+            case self::EDIT:
+            case self::DELETE:
+                return $this->canEditOrDelete($event, $user);
         }
 
         return false;
+    }
+
+    private function canView(Event $event, UserInterface $user): bool
+    {
+        if ($event->getIsPublic()) {
+            return true;
+        }
+
+        return $user instanceof UserInterface;
+    }
+
+    private function canEditOrDelete(Event $event, UserInterface $user): bool
+    {
+        return $event->getCreator() === $user;
     }
 }

@@ -16,6 +16,8 @@ class ProfileController extends AbstractController
     #[Route(path: '/profile', name: 'app_profile')]
     public function edit(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
+        $this->denyAccessUnlessGranted('manage', 'profile');
+
         /** @var User $user */
         $user = $this->getUser();
 
