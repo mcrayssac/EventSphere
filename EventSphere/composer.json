@@ -14,6 +14,7 @@
         "knplabs/knp-paginator-bundle": "^6.2",
         "mailjet/mailjet-apiv3-php": "^1.6",
         "sensio/framework-extra-bundle": "*",
+        "stripe/stripe-php": "^14.10",
         "symfony/asset": "6.0.*",
         "symfony/console": "6.0.*",
         "symfony/dotenv": "6.0.*",

@@ -2,33 +2,85 @@
 
 namespace App\Controller;
 
+use App\Service\MailerService;
 use App\Entity\Event;
+use App\Entity\Subscription;
+use App\Form\PaymentFormType;
 use App\Service\SubscriptionService;
 use App\Repository\SubscriptionRepository;
 use App\Service\EventService;
+use App\Service\PaymentService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use App\Service\MailerService;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Security;
 
 class SubscriptionController extends AbstractController
 {
     private $subscriptionService;
     private $mailerService;
     private $eventService;
+    private $paymentService;
 
-    public function __construct(SubscriptionService $subscriptionService, MailerService $mailerService, EventService $eventService)
+    public function __construct(SubscriptionService $subscriptionService, MailerService $mailerService, EventService $eventService, PaymentService $paymentService)
     {
         $this->subscriptionService = $subscriptionService;
         $this->mailerService = $mailerService;
         $this->eventService = $eventService;
+        $this->paymentService = $paymentService;
     }
 
     #[Route('/event/subscribe/{id}', name: 'event_subscribe')]
-    public function subscribe(Event $event, Request $request): Response
+    public function subscribe(Event $event, Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
+
+        // Check if the event is paid
+        if ($event->getCost() > 0) {
+            $form = $this->createForm(PaymentFormType::class);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                // Process the payment
+                $paymentResult = $this->paymentService->processPayment($user, $event, $form->getData());
+
+                if ($paymentResult['status'] === 'succeeded') {
+                    $subscription = new Subscription();
+                    $subscription->setUser($user);
+                    $subscription->setEvent($event);
+                    $subscription->setPaymentStatus('succeeded');
+                    $entityManager->persist($subscription);
+                    $entityManager->flush();
+
+                    // Send confirmation email
+                    $htmlContent = $this->renderView('emails/subscription.html.twig', [
+                        'firstName' => $user->getFirstName(),
+                        'eventTitle' => $event->getTitle(),
+                        'eventDateTime' => $event->getDateTime(),
+                        'maxParticipants' => $event->getMaxParticipants(),
+                    ]);
+                    $this->mailerService->sendEmail(
+                        $user->getEmail(),
+                        $user->getFirstName(),
+                        'Event Subscription Confirmation',
+                        $htmlContent
+                    );
+
+                    $this->addFlash('success', 'You have successfully subscribed to the event.');
+                    return $this->redirectToRoute('app_event_detail', ['id' => $event->getId()]);
+                } else {
+                    $this->addFlash('error', 'Payment failed. Please try again.');
+                }
+            }
+
+            return $this->render('subscription/pay.html.twig', [
+                'event' => $event,
+                'paymentForm' => $form->createView(),
+            ]);
+        }
+
         $result = $this->subscriptionService->subscribe($user, $event);
 
         switch ($result) {
@@ -49,14 +101,12 @@ class SubscriptionController extends AbstractController
                 $this->addFlash('success', 'You have successfully subscribed to the event.');
                 break;
             case 'event_passed':
-                // This should never show because we hide the subscribe button if the event has already passed but just in case
                 $this->addFlash('error', 'Unable to subscribe to the event. The event has already passed.');
                 break;
             case 'max_participants':
                 $this->addFlash('error', 'Unable to subscribe to the event. The maximum number of participants has been reached.');
                 break;
             case 'already_subscribed':
-                // This should never show because we hide the subscribe button if the user is already subscribed but just in case
                 $this->addFlash('error', 'Unable to subscribe to the event. You are already subscribed.');
                 break;
             default:
@@ -68,7 +118,7 @@ class SubscriptionController extends AbstractController
     }
 
     #[Route('/event/unsubscribe/{id}', name: 'event_unsubscribe')]
-    public function unsubscribe(Event $event, Request $request): Response
+    public function unsubscribe(Event $event, Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
 

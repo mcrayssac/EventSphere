@@ -38,6 +38,11 @@ class Subscription
      */
     private $subscribedAt;
 
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $paymentStatus;
+
     public function __construct()
     {
         $this->subscribedAt = new \DateTime();
@@ -80,6 +85,18 @@ class Subscription
     public function setSubscribedAt(\DateTimeInterface $subscribedAt): self
     {
         $this->subscribedAt = $subscribedAt;
+
+        return $this;
+    }
+
+    public function getPaymentStatus(): ?string
+    {
+        return $this->paymentStatus;
+    }
+
+    public function setPaymentStatus(?string $paymentStatus): self
+    {
+        $this->paymentStatus = $paymentStatus;
 
         return $this;
     }
