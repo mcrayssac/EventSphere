@@ -49,7 +49,7 @@ class HomeControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('admin@example.com');
         $client->loginUser($testUser);
 
-        // Request the home page as an authenticated user
+        // Request
         $crawler = $client->request('GET', '/');
 
         $response = $client->getResponse();
