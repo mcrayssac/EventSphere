@@ -62,6 +62,17 @@ class Event
      */
     private $creator;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isPaid = false;
+
+    /**
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
+     * @Assert\PositiveOrZero
+     */
+    private $cost;
+
     public function __construct()
     {
         $this->subscriptions = new ArrayCollection();
@@ -167,6 +178,30 @@ class Event
     public function setCreator(?User $creator): self
     {
         $this->creator = $creator;
+
+        return $this;
+    }
+
+    public function getIsPaid(): bool
+    {
+        return $this->isPaid;
+    }
+
+    public function setIsPaid(bool $isPaid): self
+    {
+        $this->isPaid = $isPaid;
+
+        return $this;
+    }
+
+    public function getCost(): ?float
+    {
+        return $this->cost;
+    }
+
+    public function setCost(?float $cost): self
+    {
+        $this->cost = $cost;
 
         return $this;
     }

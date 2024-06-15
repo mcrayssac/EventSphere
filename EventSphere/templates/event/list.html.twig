@@ -72,6 +72,9 @@
                                             <li><i class="fas fa-clock"></i> {{ event.dateTime|date('M d, Y H:i') }}</li>
                                             <li><i class="fas fa-user"></i> Remaining places: {{ event.remainingPlaces }}</li>
                                             <li><i class="fa fa-{{ event.isPublic ? 'lock-open' : 'lock' }}"></i> {{ event.isPublic ? 'Public' : 'Private' }}</li>
+                                            {% if event.isPaid %}
+                                                <li><i class="fas fa-money-bill-wave"></i> Price: {{ event.cost }}$</li>
+                                            {% endif %}
                                         </ul>
                                     </div>
                                 </div>

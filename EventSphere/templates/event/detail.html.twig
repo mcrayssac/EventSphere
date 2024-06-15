@@ -53,6 +53,9 @@
                                         <li><i class="fa fa-users"></i> Max participants: <b>{{ event.maxParticipants }}</b></li>
                                         <li><i class="fa fa-user"></i> Remaining places: <b>{{ remainingPlaces }}</b></li>
                                         <li><i class="fa fa-{{ event.isPublic ? 'lock-open' : 'lock' }}"></i> {{ event.isPublic ? 'Public' : 'Private' }}</li>
+                                        {% if event.isPaid %}
+                                            <li><i class="fas fa-money-bill-wave"></i> Price: {{ event.cost }}$</li>
+                                        {% endif %}
                                     </ul>
 
                                     <div class="ha-text pt-0">
