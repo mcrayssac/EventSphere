@@ -1,9 +1,0 @@
-services:
-  App\Service\EventService:
-    class: App\Tests\Mock\EventServiceMock
-
-  App\Repository\EventRepository:
-    class: App\Tests\Mock\EventRepositoryMock
-
-  Symfony\Component\Security\Core\Security:
-    class: App\Tests\Mock\SecurityMock
