@@ -32,41 +32,35 @@
 
                 {{ form_start(profileForm, {'attr': {'class': 'comment-form contact-form'}}) }}
                     <div class="row">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                {{ form_widget(profileForm.firstName, {'attr': {'class': 'form-control', 'placeholder': 'First Name'}}) }}
-                                {{ form_errors(profileForm.firstName) }}
-                            </div>
+                        <div class="col-lg-6 form-group">
+                            <label for="firstName"><i class="fas fa-address-card"></i> First name</label>
+                            {{ form_widget(profileForm.firstName, {'attr': {'class': 'form-control', 'placeholder': 'Joe'}}) }}
+                            {{ form_errors(profileForm.firstName) }}
                         </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                {{ form_widget(profileForm.lastName, {'attr': {'class': 'form-control', 'placeholder': 'Last Name'}}) }}
-                                {{ form_errors(profileForm.lastName) }}
-                            </div>
+                        <div class="col-lg-6 form-group">
+                            <label for="lastName"><i class="fas fa-address-card"></i> Last name</label>
+                            {{ form_widget(profileForm.lastName, {'attr': {'class': 'form-control', 'placeholder': 'Fox'}}) }}
+                            {{ form_errors(profileForm.lastName) }}
                         </div>
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                {{ form_widget(profileForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
-                                {{ form_errors(profileForm.email) }}
-                            </div>
+                        <div class="col-lg-6 form-group">
+                            <label for="email"><i class="fas fa-at"></i> Email</label>
+                            {{ form_widget(profileForm.email, {'attr': {'class': 'form-control', 'placeholder': 'xxx@xxx.xx'}}) }}
+                            {{ form_errors(profileForm.email) }}
                         </div>
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                {{ form_widget(profileForm.currentPassword, {'attr': {'class': 'form-control', 'placeholder': 'Current Password'}}) }}
-                                {{ form_errors(profileForm.currentPassword) }}
-                            </div>
+                        <div class="col-lg-6 form-group">
+                            <label for="currentPassword"><i class="fas fa-key"></i> Current password</label>
+                            {{ form_widget(profileForm.currentPassword, {'attr': {'class': 'form-control', 'placeholder': 'xxxxxxxx'}}) }}
+                            {{ form_errors(profileForm.currentPassword) }}
                         </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                {{ form_widget(profileForm.plainPassword.first, {'attr': {'class': 'form-control', 'placeholder': 'New Password'}}) }}
-                                {{ form_errors(profileForm.plainPassword.first) }}
-                            </div>
+                        <div class="col-lg-6 form-group">
+                            <label for="plainPasswordFirst"><i class="fas fa-key"></i> New password (fill only if wanted)</label>
+                            {{ form_widget(profileForm.plainPassword.first, {'attr': {'class': 'form-control', 'placeholder': 'xxxxxxxx'}}) }}
+                            {{ form_errors(profileForm.plainPassword.first) }}
                         </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                {{ form_widget(profileForm.plainPassword.second, {'attr': {'class': 'form-control', 'placeholder': 'Confirm New Password'}}) }}
-                                {{ form_errors(profileForm.plainPassword.second) }}
-                            </div>
+                        <div class="col-lg-6 form-group">
+                            <label for="plainPasswordSecond"><i class="fas fa-key"></i> Confirm new password (fill only if wanted)</label>
+                            {{ form_widget(profileForm.plainPassword.second, {'attr': {'class': 'form-control', 'placeholder': 'xxxxxxxx'}}) }}
+                            {{ form_errors(profileForm.plainPassword.second) }}
                         </div>
                         <div class="col-lg-12 text-center">
                             <button type="submit" class="site-btn"><i class="fas fa-user-pen"></i> Update Profile</button>

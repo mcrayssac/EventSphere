@@ -2076,7 +2076,11 @@ ol {
 	color: #171822;
 }
 
-/* Add this to your CSS file */
+input[type='checkbox']{
+	height: 30px !important;
+	accent-color: #f44949;
+  }
+
 button[aria-expanded="true"] .collapsed-text {
     display: none;
 }

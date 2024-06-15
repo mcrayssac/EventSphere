@@ -24,35 +24,30 @@
                 <div class="col-lg-12">
                     {{ form_start(registrationForm, {'attr': {'class': 'comment-form contact-form'}}) }}
                         <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    {{ form_widget(registrationForm.firstName, {'attr': {'class': 'form-control', 'placeholder': 'First Name'}}) }}
-                                    {{ form_errors(registrationForm.firstName) }}
-                                </div>
+                            <div class="col-lg-6 form-group">
+                                <label for="firstName"><i class="fas fa-address-card"></i> First name</label>
+                                {{ form_widget(registrationForm.firstName, {'attr': {'class': 'form-control', 'placeholder': 'Joe'}}) }}
+                                {{ form_errors(registrationForm.firstName) }}
                             </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    {{ form_widget(registrationForm.lastName, {'attr': {'class': 'form-control', 'placeholder': 'Last Name'}}) }}
-                                    {{ form_errors(registrationForm.lastName) }}
-                                </div>
+                            <div class="col-lg-6 form-group">
+                                <label for="lastName"><i class="fas fa-address-card"></i> Last name</label>
+                                {{ form_widget(registrationForm.lastName, {'attr': {'class': 'form-control', 'placeholder': 'Fox'}}) }}
+                                {{ form_errors(registrationForm.lastName) }}
                             </div>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
-                                    {{ form_errors(registrationForm.email) }}
-                                </div>
+                            <div class="col-lg-12 form-group">
+                                <label for="email"><i class="fas fa-at"></i> Email</label>
+                                {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'xxx@xxx.xx'}}) }}
+                                {{ form_errors(registrationForm.email) }}
                             </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control', 'placeholder': 'Password'}}) }}
-                                    {{ form_errors(registrationForm.plainPassword.first) }}
-                                </div>
+                            <div class="col-lg-6 form-group">
+                                <label for="plainPasswordFirst"><i class="fas fa-key"></i> Password</label>
+                                {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control', 'placeholder': 'xxxxxxxx'}}) }}
+                                {{ form_errors(registrationForm.plainPassword.first) }}
                             </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control', 'placeholder': 'Confirm Password'}}) }}
-                                    {{ form_errors(registrationForm.plainPassword.second) }}
-                                </div>
+                            <div class="col-lg-6 form-group">
+                                <label for="plainPasswordSecond"><i class="fas fa-key"></i> Confirm password</label>
+                                {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control', 'placeholder': 'xxxxxxxx'}}) }}
+                                {{ form_errors(registrationForm.plainPassword.second) }}
                             </div>
                             <div class="col-lg-12 text-center">
                                 <button type="submit" class="site-btn"><i class="fa fa-user-plus"></i> Register</button>
