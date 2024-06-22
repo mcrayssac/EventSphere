@@ -34,8 +34,8 @@ It should run, but you are most likely to run into a database error when interac
 
 **Solution**:
 ```bash
-sudo chown -R :www-data /EventSphere
-sudo chmod -R 775 /EventSphere
+sudo chown -R :www-data EventSphere
+sudo chmod -R 775 EventSphere
 ```
 
 ### Running Unit Tests
